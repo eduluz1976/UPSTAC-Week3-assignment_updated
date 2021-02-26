@@ -39,6 +39,7 @@ class LabRequestControllerTest {
         TestRequest testRequest = getTestRequestByStatus(RequestStatus.INITIATED);
         //Implement this method
 
+        // TODO
         //Create another object of the TestRequest method and explicitly assign this object for Lab Test using assignForLabTest() method
         // from labRequestController class. Pass the request id of testRequest object.
 
@@ -61,6 +62,7 @@ class LabRequestControllerTest {
 
         Long InvalidRequestId= -34L;
 
+        // TODO
         //Implement this method
 
 
@@ -79,6 +81,7 @@ class LabRequestControllerTest {
 
         TestRequest testRequest = getTestRequestByStatus(RequestStatus.LAB_TEST_IN_PROGRESS);
 
+        // TODO
         //Implement this method
         //Create an object of CreateLabResult and call getCreateLabResult() to create the object. Pass the above created object as the parameter
 
@@ -101,7 +104,7 @@ class LabRequestControllerTest {
 
         TestRequest testRequest = getTestRequestByStatus(RequestStatus.LAB_TEST_IN_PROGRESS);
 
-
+        // TODO
         //Implement this method
 
         //Create an object of CreateLabResult and call getCreateLabResult() to create the object. Pass the above created object as the parameter
@@ -122,6 +125,7 @@ class LabRequestControllerTest {
 
         TestRequest testRequest = getTestRequestByStatus(RequestStatus.LAB_TEST_IN_PROGRESS);
 
+        // TODO
         //Implement this method
 
         //Create an object of CreateLabResult and call getCreateLabResult() to create the object. Pass the above created object as the parameter
@@ -139,6 +143,7 @@ class LabRequestControllerTest {
 
     public CreateLabResult getCreateLabResult(TestRequest testRequest) {
 
+        // TODO
         //Create an object of CreateLabResult and set all the values
         // Return the object
 

@@ -2,56 +2,112 @@ package org.upgrad.upstac.testrequests;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.web.server.ResponseStatusException;
+import org.upgrad.upstac.config.security.UserLoggedInService;
 import org.upgrad.upstac.testrequests.TestRequest;
 import org.upgrad.upstac.testrequests.consultation.ConsultationController;
 import org.upgrad.upstac.testrequests.consultation.CreateConsultationRequest;
 import org.upgrad.upstac.testrequests.lab.TestStatus;
 import org.upgrad.upstac.testrequests.RequestStatus;
 import org.upgrad.upstac.testrequests.TestRequestQueryService;
+import org.upgrad.upstac.users.User;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
 @Slf4j
+@ExtendWith(MockitoExtension.class)
 class ConsultationControllerTest {
 
 
-    @Autowired
+    @InjectMocks
     ConsultationController consultationController;
+
+    @Mock
+    TestRequestUpdateService testRequestUpdateService;
+
+    @Mock
+    TestRequestRepository testRequestRepository;
 
 
     @Autowired
     TestRequestQueryService testRequestQueryService;
 
+    @Mock
+    UserLoggedInService userLoggedInService;
+
 
     @Test
     @WithUserDetails(value = "doctor")
-    public void calling_assignForConsultation_with_valid_test_request_id_should_update_the_request_status(){
+    public void calling_assignForConsultation_with_valid_test_request_id_should_update_the_request_status_1(){
 
-        TestRequest testRequest = getTestRequestByStatus(RequestStatus.LAB_TEST_COMPLETED);
+        // Arrange
+        String emailUser = "email-test@domain.com";
+        Long id = 1L;
+        User loggedUser = new User();
+        loggedUser.setEmail(emailUser);
 
-        //Implement this method
+        TestRequest expectedResponseTestRequest = new TestRequest();
+        expectedResponseTestRequest.setRequestId(id);
+        expectedResponseTestRequest.setStatus(RequestStatus.DIAGNOSIS_IN_PROCESS);
+        expectedResponseTestRequest.setEmail(emailUser);
 
-        //Create another object of the TestRequest method and explicitly assign this object for Consultation using assignForConsultation() method
-        // from consultationController class. Pass the request id of testRequest object.
+        // Returns my logged user
+        when(userLoggedInService.getLoggedInUser()).thenReturn(loggedUser);
 
-        //Use assertThat() methods to perform the following two comparisons
-        //  1. the request ids of both the objects created should be same
-        //  2. the status of the second object should be equal to 'DIAGNOSIS_IN_PROCESS'
-        // make use of assertNotNull() method to make sure that the consultation value of second object is not null
-        // use getConsultation() method to get the lab result
+        // Force returns the expected Response
+        when(testRequestUpdateService.assignForConsultation(id, loggedUser)).thenReturn(expectedResponseTestRequest);
 
+
+        // Act
+        TestRequest response = this.consultationController.assignForConsultation(id);
+
+
+        // Assert
+        assertThat(response).isNotNull();
+        assertThat((String) response.getEmail()).isEqualTo(emailUser);
+        assertThat(response.getRequestId()).isEqualTo(id);
+        assertThat(response.getStatus()).isEqualTo(RequestStatus.DIAGNOSIS_IN_PROCESS);
 
     }
+
+
+    @Test
+    @WithUserDetails(value = "doctor")
+    public void calling_assignForConsultation_with_valid_test_request_id_should_update_the_request_status_2(){
+
+        // Arrange
+        String emailUser = "email-test@domain.com";
+        Long id = 1L;
+        User loggedUser = new User();
+        loggedUser.setEmail(emailUser);
+
+        when(userLoggedInService.getLoggedInUser()).thenReturn(loggedUser);
+
+        // Act
+        this.consultationController.assignForConsultation(id);
+
+        // Assert
+        verify(testRequestUpdateService,times(1)).assignForConsultation(id, loggedUser);
+
+    }
+
 
     public TestRequest getTestRequestByStatus(RequestStatus status) {
         return testRequestQueryService.findBy(status).stream().findFirst().get();
@@ -63,6 +119,7 @@ class ConsultationControllerTest {
 
         Long InvalidRequestId= -34L;
 
+        // TODO
         //Implement this method
 
 
@@ -81,6 +138,7 @@ class ConsultationControllerTest {
 
         TestRequest testRequest = getTestRequestByStatus(RequestStatus.DIAGNOSIS_IN_PROCESS);
 
+        // TODO
         //Implement this method
         //Create an object of CreateConsultationRequest and call getCreateConsultationRequest() to create the object. Pass the above created object as the parameter
 
@@ -103,6 +161,7 @@ class ConsultationControllerTest {
 
         TestRequest testRequest = getTestRequestByStatus(RequestStatus.DIAGNOSIS_IN_PROCESS);
 
+        // TODO
         //Implement this method
 
         //Create an object of CreateConsultationRequest and call getCreateConsultationRequest() to create the object. Pass the above created object as the parameter
@@ -123,6 +182,7 @@ class ConsultationControllerTest {
 
         TestRequest testRequest = getTestRequestByStatus(RequestStatus.DIAGNOSIS_IN_PROCESS);
 
+        // TODO
         //Implement this method
 
         //Create an object of CreateConsultationRequest and call getCreateConsultationRequest() to create the object. Pass the above created object as the parameter
@@ -137,6 +197,7 @@ class ConsultationControllerTest {
 
     public CreateConsultationRequest getCreateConsultationRequest(TestRequest testRequest) {
 
+        // TODO
         //Create an object of CreateLabResult and set all the values
         // if the lab result test status is Positive, set the doctor suggestion as "HOME_QUARANTINE" and comments accordingly
         // else if the lab result status is Negative, set the doctor suggestion as "NO_ISSUES" and comments as "Ok"
